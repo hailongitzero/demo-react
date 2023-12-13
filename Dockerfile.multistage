@@ -1,0 +1,29 @@
+# Base image: có sẵn nodejs version 16 và npm
+FROM node:16-alpine AS builder
+
+# Khai báo thư mục làm việc
+WORKDIR /project
+
+# Copy tệp tin package.json và package-lock.json vào thư mục làm việc của image
+COPY package.json package-lock.json /project/
+
+# Tải về các thư viện có khai báo trong package.json
+RUN npm install
+
+# Copy source code vào trong image
+COPY . /project/
+
+# Build source code
+RUN npm run build
+
+# Base image: nginx phục vụ web tĩnh
+FROM nginx:1.24.0-alpine
+
+# Copy thư mục build từ stage builder vào trong nginx tại thư mục /usr/share/nginx/html
+COPY --from=builder /project/build /usr/share/nginx/html
+
+# Khai báo cổng nginx hoạt động
+EXPOSE 80
+
+# Lệnh chạy nginx khi container được khởi tạo từ image
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
