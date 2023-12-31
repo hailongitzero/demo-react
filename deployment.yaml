@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-demo
+  labels:
+    app: react-demo
+    role: frontend
+spec:
+  template:
+    metadata:
+      labels:
+        app: react-demo
+        role: frontend
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: server
+        image: hailongitzero/react:v2
+        env:
+        - name: BASE_URL
+          value: api
+  selector:
+    matchLabels:
+      role: frontend
+  replicas: 2

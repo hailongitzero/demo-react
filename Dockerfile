@@ -1,16 +1,19 @@
 FROM node:latest AS build
-WORKDIR /project
+WORKDIR /app
+COPY . /app
+
+RUN npm install
 
 RUN npm run build
 
-# Base image: có sẵn nodejs version 16 và npm
+# Base image
 FROM nginx:alpine
 
-# Copy tệp tin package.json và package-lock.json vào thư mục làm việc của image
-COPY ./build /usr/share/nginx/html
+# Copy source code vao folder nginx/html
+COPY --from=build /app/build /usr/share/nginx/html
 
 # Copy source code vào trong image
 COPY default.conf /etc/nginx/conf.d/
 
-# Khai báo ứng dụng chạy ở cổng 3000 trong container tạo từ image này
+# Khai báo ứng dụng chạy ở cổng 80 trong container tạo từ image này
 EXPOSE 80
