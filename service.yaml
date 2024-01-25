@@ -1,13 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: react-demo
+  name: demo-service
   labels: 
     role: frontend
 spec:
   selector:
+    app: react-demo
     role: frontend
+  type: LoadBalancer
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 8080
+      targetPort: 80

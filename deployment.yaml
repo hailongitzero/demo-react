@@ -12,14 +12,17 @@ spec:
         app: react-demo
         role: frontend
     spec:
-      restartPolicy: OnFailure
+      restartPolicy: Always
       containers:
-      - name: server
+      - name: react-ui
         image: hailongitzero/react:v2
+        ports:
+          - containerPort: 80
         env:
         - name: BASE_URL
           value: api
   selector:
     matchLabels:
+      app: react-demo
       role: frontend
   replicas: 2
