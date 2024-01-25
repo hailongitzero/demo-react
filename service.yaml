@@ -9,6 +9,8 @@ spec:
     app: react-demo
     role: frontend
   type: LoadBalancer
+  externalIPs:
+    - 10.64.43.109
   ports:
     - protocol: TCP
       port: 80
